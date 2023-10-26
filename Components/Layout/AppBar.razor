@@ -1,0 +1,42 @@
+﻿@implements IAsyncDisposable
+
+@rendermode RenderMode.InteractiveServer
+
+@inject LayoutState LayoutState
+
+<MudAppBar>
+    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+    My Application
+    <MudSpacer />
+    <MudToggleIconButton Icon="@Icons.Material.Sharp.LightMode"
+                         ToggledIcon="@Icons.Material.Sharp.DarkMode"
+                         Color="Color.Inherit" ToggledChanged="DarkModeToggle"/>
+</MudAppBar>
+
+<MudDrawer Open="@LayoutState.IsDrawerOpen">
+    <NavMenu />
+</MudDrawer>
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        LayoutState.OnChange += StateHasChanged;
+        return base.OnInitializedAsync();
+    }
+
+    private void DrawerToggle()
+    {
+        LayoutState.ToggleDrawer();
+    }
+
+    private void DarkModeToggle()
+    {
+        LayoutState.ToggleDarkMode();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        LayoutState.OnChange -= StateHasChanged;
+        return ValueTask.CompletedTask;
+    }
+}

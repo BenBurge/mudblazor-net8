@@ -1,0 +1,23 @@
+﻿@implements IAsyncDisposable
+
+@rendermode RenderMode.InteractiveServer
+
+@inject LayoutState LayoutState
+
+<MudThemeProvider IsDarkMode="LayoutState.IsDarkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        LayoutState.OnChange += StateHasChanged;
+        return base.OnInitializedAsync();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        LayoutState.OnChange -= StateHasChanged;
+        return ValueTask.CompletedTask;
+    }
+}
